@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { ChakraProvider } from '@chakra-ui/react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { BaseLayout } from './components/BaseLayout'
+import { LoginPage } from './pages/Login'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -10,7 +11,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <BrowserRouter>
         <Routes>
           <Route path='/teste' element={<BaseLayout/>}/>
-          <Route path='/' element={<div/>}/>
+          <Route path='/login' element={<LoginPage/>}/>
           <Route path='/' element={<div/>}/>
           <Route path='/' element={<div/>}/>
           <Route path='/' element={<div/>}/>
