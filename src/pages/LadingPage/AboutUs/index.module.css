@@ -1,0 +1,107 @@
+.root{
+    background: linear-gradient(0deg, rgba(255, 255, 255, 1) 33%, rgba(248, 248, 248, 1) 88%);
+    color: var(--blue);
+}
+
+h2{
+    margin: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 130.687%;
+    letter-spacing: 1.541px;
+    color: var(--blue);
+}
+
+.to_left{
+    text-align: left;
+}
+
+.to_right{
+    text-align: right;
+}
+
+p{
+    margin: 0px;
+    margin-top:5px;
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: 0.84px;
+    color: var(--blue);
+}
+
+.s1{
+    margin-top: -0px;
+    padding: 173px;
+    background-color: transparent;
+    background-image: url("../../assets/bg-2.svg");
+    background-repeat: no-repeat;
+    background-size: 60%;
+    width: auto;
+    height: 173px;
+    padding-top: 14%;
+}
+
+.s1 > *{
+    width: 52%;
+}
+
+.s2{
+    margin-top: -50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.s2_col2{
+    padding: 125px;
+    background-image: url("../../assets/bg-3.svg");
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: 100%;
+    width: auto;
+    height: auto;
+    padding-top: 10%;
+}
+
+.dog{
+    width: 120%;
+    height: auto;
+}
+
+.s3{
+    text-align: center;
+    background-image: url("../../assets/bg-4.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 50%;
+    margin-top: -5%;
+    padding: 100px;
+}
+
+.bubble1{
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    top: 115%;
+    left: 55%;
+}
+
+.bubble2{
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    top: 200%;
+    left: 42%;
+}
+
+.bubble3{
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    top: 248%;
+    left: 23%;
+}
