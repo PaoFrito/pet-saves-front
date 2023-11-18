@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Box, Text } from "@chakra-ui/react"
+import { Flex, Spacer, Text } from "@chakra-ui/react"
 
 type Props = {
     icon: ReactNode,
@@ -9,13 +9,9 @@ type Props = {
 export const SideBarItem = (props: Props) => {
 
     return (<>
-        <Box 
-            color='#5072E8'
-            w='100%'
-            h='20px'    
-        >
+        <Flex w='100%' h='20px' m='16px' color='#5072E8' direction='row' align='center' justify='right'>
             {props.icon}
-            <Text fontSize={24}>{props.text}</Text>
-        </Box>
+            <Text ml='8px' fontSize={24}>{props.text}</Text>
+        </Flex>
     </>)
 }
