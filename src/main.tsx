@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { BaseLayout } from './components/BaseLayout'
 import { LoginPage } from './pages/Login'
 import { UserContextProvider } from './context/UserContext'
+import './style/base.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
