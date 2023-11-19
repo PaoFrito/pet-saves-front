@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { Flex, Box, Image, Text, Input, Stack, Button } from "@chakra-ui/react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faX } from '@fortawesome/free-solid-svg-icons'
-import { timeout, validateEmail } from "../../utils"
+import { validateEmail } from "../../utils"
+import useUserContext from '../../hooks/useUserContext';
 import logo from "../../assets/logo.png"
 
 export const LoginPage = () => {
@@ -29,21 +30,18 @@ export const LoginPage = () => {
             setPasswordInvalid(false)
     }
 
+    const { login } = useUserContext()
+
     const submit = async () => {
         setSubmitBtnLoading(true)
         setEmailInvalid(!validateEmail(email))
         validatePassword()
-        await setToken()
-        await timeout(2000)
-        setSubmitBtnLoading(false)
-        await timeout(1000)
-        navigate("/")
-    }
-
-    const setToken = async () => {
-        //TODO API CALL
-        const value = '123456789'
-        localStorage.setItem('access_token', value)
+        login({credentials: {email: email, password: password}}).then(()=>{
+            setSubmitBtnLoading(false)
+            navigate("/")
+        }).catch((e)=>{
+            alert(e)
+        })
     }
 
     return (<>

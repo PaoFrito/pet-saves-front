@@ -1,17 +1,32 @@
-import { ReactNode } from 'react';
-import { Flex, Spacer, Text } from "@chakra-ui/react"
+import { ReactNode } from "react"
+import { Grid, GridItem, Text } from "@chakra-ui/react"
 
-type Props = {
-    icon: ReactNode,
+
+type SideBarItemProps = {
     text: string
+    icon: ReactNode
 }
 
-export const SideBarItem = (props: Props) => {
+export const SideBarItem = (props: SideBarItemProps) =>{
 
-    return (<>
-        <Flex w='100%' h='20px' m='16px' color='#5072E8' direction='row' align='center' justify='right'>
-            {props.icon}
-            <Text ml='8px' fontSize={24}>{props.text}</Text>
-        </Flex>
+    const colIcon = 5
+    const colTextStart = 6
+    const colTextEnd = 11
+
+    const SBText = ({ text }: { text: string }) => {
+        return(
+            <Text fontSize='24'>{text}</Text>
+        )
+    }
+
+    return(<>
+        <Grid w='100%' templateColumns={`repeat(10, 10%)`} color='#5072E8' cursor='pointer'>
+            <GridItem colStart={colIcon} colSpan={1} alignSelf='center'>
+                {props.icon}
+            </GridItem>
+            <GridItem colStart={colTextStart} colEnd={colTextEnd}>
+                <SBText text={props.text}/>
+            </GridItem>
+        </Grid>    
     </>)
 }

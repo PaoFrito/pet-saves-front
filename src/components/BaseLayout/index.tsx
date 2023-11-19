@@ -2,7 +2,7 @@ import { Box, Flex } from "@chakra-ui/react"
 import { SideBar } from "../SideBar"
 
 export const BaseLayout = () =>{
-    let padding = 20
+    let padding = '20px'
 
     return(
         <Flex w='100vw' minH='100vh' direction='row'>
