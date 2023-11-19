@@ -61,7 +61,7 @@ export const LoginPage = () => {
                                 color='#fff'
                                 isInvalid={emailInvalid}
                                 focusBorderColor='#000'
-                                errorBorderColor='red.300'
+                                errorBorderColor='red.500'
                             />
                         </Box>
                         <Box w='100%'>
