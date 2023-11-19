@@ -1,5 +1,6 @@
-import { Box, Flex } from "@chakra-ui/react"
+import { Alert, AlertIcon, Box, Flex } from "@chakra-ui/react"
 import { SideBar } from "../SideBar"
+import { Feed } from "../Feed"
 
 export const BaseLayout = () =>{
     const padding = '20px'
@@ -12,12 +13,14 @@ export const BaseLayout = () =>{
                 </Box>
             </Box>
             <Flex w='40%' p={padding} borderLeft='1px' borderRight='1px' borderColor='gray.100' flexDirection="column" overflow="hidden">
-                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>aaaaaaaaaaaaa
+                <Feed />
             </Flex>    
             <Box p={padding} w='30%'>
                 <Box position="fixed" w="inherit">
-                bbbbbb
+                <Alert status='info' borderRadius="15px" w="400px" variant='left-accent' alignItems="flex-start">
+                    <AlertIcon />
+                    Ajude a manter o projeto! Sua doação é crucial para garantir a continuidade e aprimoramento constante de nossos serviços. Colabore conosco para sustentar iniciativas que beneficiam a comunidade.
+                </Alert>
                 </Box>
             </Box> 
         </Flex>
