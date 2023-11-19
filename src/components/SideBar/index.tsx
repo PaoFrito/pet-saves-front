@@ -23,9 +23,9 @@ export const SideBar = () =>{
             </Flex>
             <Flex cursor='pointer' mt="64px" alignItems="center" justifyContent="space-between" borderRadius="15px" p="8px 14px" _hover={{backgroundColor: '#5072E83B'}}>
                 <Flex alignItems="center" gap="14px">
-                    <Avatar src={userState.img} name={userState.name} size="md" borderWidth='2px' borderColor='#5072E8'/>
+                    <Avatar src={userState.imageUrl} name={userState.username} size="md" borderWidth='2px' borderColor='#5072E8'/>
                     <Text fontSize='18px' color='#5072E8' fontWeight="600">
-                        {userState.name || 'Desconhecido'}
+                        {userState.username || 'Desconhecido'}
                     </Text>
                 </Flex>
                 <FontAwesomeIcon icon={faEllipsis} size="2x" color='#505050'/>

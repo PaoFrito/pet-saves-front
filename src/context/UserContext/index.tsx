@@ -3,73 +3,85 @@ import axios from "axios";
 import { User } from "../../model/User";
 
 type Credentials = {
-    email:string, 
-    password: string
-}
+  username: string;
+  password: string;
+};
 
 export type UserContextProps = {
-    userState: User;
-    login: ({credentials} : {credentials: Credentials}) => Promise<void>;
-    logout: () => void;
+  userState?: User;
+  login: ({ credentials }: { credentials: Credentials }) => Promise<void>;
+  logout: () => void;
 };
 
 type UserContextProviderProps = {
-    children: React.ReactNode;
+  children: React.ReactNode;
 };
 
 const DEFAULT_VALUES = {
-    userState: {
-        id: "",
-        img: "",
-        name: ""
-    },
-    login: async () => {},
-    logout: () => {}
+  userState: {
+    id: "",
+    email: "",
+    username: "",
+    imageUrl: "",
+    accessToken: "",
+  },
+  login: async () => {},
+  logout: () => {},
 };
 
 const UserContext = createContext<UserContextProps>(DEFAULT_VALUES);
 
 const UserContextProvider = ({ children }: UserContextProviderProps) => {
-    
-    const [userState, setUserState] = useState<User>({...DEFAULT_VALUES.userState});
+//   const [userState, setUserState] = useState<User>({
+//     ...DEFAULT_VALUES.userState,
+//   });
+  const [userState, setUserState] = useState<User>();
 
-    const login = async ({credentials} : {credentials: Credentials}) => {
-        let user: User
-        await axios.post('', [credentials.email, credentials.password]).then(
-            (res) => {
-                user.id = res.data.id;
-                user.img = res.data.img;
-                user.name = res.data.name;
+  if(!userState){
+    const userStorage = localStorage.getItem('user')
+    if(userStorage && !userState){
+      setUserState(JSON.parse(userStorage))
+    }
+  }
 
-                setUserState(user);
+  const login = async ({ credentials }: { credentials: Credentials }) => {
+    const url = `${import.meta.env.VITE_BASE_API_URL}/v1/auth/login`;
+    const res = await axios.post(url, credentials);
 
-                localStorage.setItem('user_access_token', res.data.token)
-                localStorage.setItem('user_id',  user.id)
-                localStorage.setItem('user_img', user.img)
-                localStorage.setItem('user_name', user.name)
-            }
-        ).catch((e)=>{console.log(e)});
+    if (res.status !== 200) {
+      console.log(res);
+      return Promise.reject();
     }
 
-    const logout = () => {  
-        localStorage.removeItem('user_access_token')
-        localStorage.removeItem('user_id')
-        localStorage.removeItem('user_img')
-        localStorage.removeItem('user_name')
-        setUserState({...DEFAULT_VALUES.userState});
+    const user = {
+        accessToken: `${res.data.oauthToken.type} ${res.data.oauthToken.accessToken}`,
+        refreshToken: `${res.data.oauthToken.type} ${res.data.oauthToken.refreshToken}`,
+        email: res.data.user.email,
+        id: res.data.user.id,
+        imageUrl: res.data.user.imageUrl,
+        username: res.data.user.username,
     }
-    
-    return (
-        <UserContext.Provider
-            value={{
-                userState,
-                login,
-                logout
-            }}
-        >
-            {children}
-        </UserContext.Provider>
-    );
+    localStorage.setItem("user", JSON.stringify(user));
+    setUserState(user);
+    return Promise.resolve();
+  };
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    setUserState(undefined);
+  };
+
+  return (
+    <UserContext.Provider
+      value={{
+        userState,
+        login,
+        logout,
+      }}
+    >
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 export default UserContext;

@@ -1,5 +1,4 @@
 import { Avatar, Flex, Img, Text } from "@chakra-ui/react"
-import useUserContext from "../../hooks/useUserContext"
 import moment from "moment";
 
 interface PostProps{
@@ -16,8 +15,6 @@ interface PostProps{
 }
 
 export const Post = ({createdAt, authorUrl, authorName, animalName, animalSize, animalType, animalAge, animalId, description, imageUrl}: PostProps) =>{
-    const { userState } = useUserContext()
-
     const getDays = (unix: number) => {
         const date = moment.unix(unix)
         const now = moment()
