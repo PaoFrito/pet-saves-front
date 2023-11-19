@@ -3,16 +3,19 @@ import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaw } from '@fortawesome/free-solid-svg-icons'
 import img from '../../..//assets/img-base.svg'
-import RadioGroup from "../../RadioGroup"
-import { SelectSpecies } from "../../../model/Enum/SpeciesEnum"
-
-import { useState } from "react"
+import RadioGroup from "../../../RadioGroup"
+import { SelectSpecies } from "../../../../model/Enum/SpeciesEnum"
+import useSpecieContext from "../../../../hooks/useSpecieContext"
 
 export const AnimalRescueModal = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const [specie, setSpecie] = useState()
+  const { specieState } = useSpecieContext()
+
+  const print = () => {
+    console.log(specieState)
+  }
 
   const faPawIcon = <FontAwesomeIcon icon={faPaw} size="2x" />
 
@@ -40,7 +43,7 @@ export const AnimalRescueModal = () => {
                   <Input type="file" src={img} h='300px' accept="image/*" aria-hidden="true" />
                 </Flex>
                 <Flex w='50%' align='flex-start'>
-                  <RadioGroup options={SelectSpecies} name="especies" onChange={setSpecie} />
+                  <RadioGroup options={SelectSpecies} name="especies" />
                   <Button variant='outline' mr={3} onClick={print}>print</Button>
                 </Flex>
               </Flex>

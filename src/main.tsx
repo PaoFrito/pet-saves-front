@@ -6,6 +6,7 @@ import { BaseLayout } from './components/BaseLayout'
 import { AnimalRescueModal } from './components/Modals/AnimalRescueModal'
 import { LoginPage } from './pages/Login'
 import { UserContextProvider } from './context/UserContext'
+import './style/base.css'
 import { SpecieContextProvider } from './context/SpecieContext'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

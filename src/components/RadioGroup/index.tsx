@@ -1,6 +1,4 @@
 import { useRadio, useRadioGroup, HStack, Box, Flex } from "@chakra-ui/react"
-import useSpecieContext from "../../hooks/useSpecieContext"
-import Species from "../../model/Enum/SpeciesEnum"
 
 const RadioCard = (props: any) => {
   const { getInputProps, getRadioProps } = useRadio(props)
@@ -41,17 +39,15 @@ const RadioCard = (props: any) => {
 
 export type RadioOptions = {
   label: string,
-  icon: JSX.Element
+  icon: JSX.Element | undefined
 }
 
-const RadioGroup = ({ options, name }: { options: RadioOptions[], name: string }) => {
-
-  const { setSpecieState } = useSpecieContext()
+const RadioGroup = ({ options, name, onChange }: { options: RadioOptions[], name: string, onChange: CallableFunction }) => {
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: name,
     defaultValue: options[0].label,
-    onChange: setSpecieState,
+    onChange: (value)=>onChange(value),
   })
 
   const group = getRootProps()

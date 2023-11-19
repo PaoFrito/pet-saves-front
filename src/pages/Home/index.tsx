@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react"
-import { SideBar } from "../SideBar"
+import { BaseLayout }  from "../../components/BaseLayout"
 
-export const BaseLayout = () =>{
+export const HomePage = () =>{
     const padding = '20px'
 
     return(
