@@ -6,8 +6,8 @@ const faDogIcon = <FontAwesomeIcon icon={faDog} size="2x"/>
 const faCatIcon = <FontAwesomeIcon icon={faCat} size="2x"/>
 
 enum Species {
-    dog = "cachorro",
-    cat = "gato"
+    dog = "dog",
+    cat = "cat"
 }
 
 export const SelectSpecies: RadioOptions[] = [

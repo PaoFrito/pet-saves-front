@@ -21,9 +21,9 @@ const isToFeed = [{ label: 'Criar publicação', icon: undefined },
 type FormData = {
   name: string
   img: string
-  specie: string
+  type: string
   size: Size
-  age: number
+  ageInMonths: number
   feed: boolean
   feedText: string
 }
@@ -40,9 +40,9 @@ const AnimalReportModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () =
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} size='xl'>
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent w="6000px">
           <ModalHeader fontSize='24px' color='#5072E8' justifyContent='center'>
             <Flex align='center' gap='24px'>
               {faCircleExclamationIcon} Reportar animal perdido
