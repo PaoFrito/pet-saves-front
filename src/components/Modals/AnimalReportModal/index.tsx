@@ -1,11 +1,13 @@
 import { useForm } from "react-hook-form"
-import { Grid, Box, Textarea, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Flex, Text, Input } from "@chakra-ui/react"
+import { Grid, Box, Textarea, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Flex, Text, Input, Img } from "@chakra-ui/react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import RadioGroup from "../../RadioGroup"
 import { SelectSpecies } from "../../../model/Enum/SpeciesEnum"
 import Dropzone from "react-dropzone"
 import { useState } from "react"
+import useUserContext from "../../../hooks/useUserContext"
+import axios from "axios"
 
 enum Size {
   sm = 'small',
@@ -21,33 +23,32 @@ const isToFeed = [{ label: 'Criar publicação', icon: undefined },
 { label: 'Não criar publicação', icon: undefined }]
 
 type FormData = {
-  name: string
+  lastLocation: string
   img: string
   type: string
   size: Size
   ageInMonths: number
   createPublication: boolean
-  feedText: string
+  publicationDescription: string
 }
 
 const AnimalReportModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
-  const faCircleExclamationIcon = <FontAwesomeIcon icon={faCircleExclamation} size="2x" />
-
-  const { watch, setValue, reset } = useForm<FormData>({
+  const [isLoading, setLoading] = useState(false);
+  const { userState } = useUserContext();
+  const [file, setFile] = useState();
+  const { watch, setValue, handleSubmit, register, reset } = useForm<FormData>({
     defaultValues: {
-      type: 'dog',
+      createPublication: true,
+      type: "dog",
       size: Size.sm,
-      createPublication: true
-    }
-  })
+    },
+  });
 
   const close = () => {
     reset()
     onClose()
   }
 
-  const [file, setFile] = useState()
-  
   const onDrop = (acceptedFiles: any) => {
     // Verifica se há pelo menos um arquivo
     if (acceptedFiles.length > 0) {
@@ -55,16 +56,48 @@ const AnimalReportModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () =
 
       const reader = new FileReader();
       reader.onload = () => {
-        const base64String = reader.result;
-        setFile(Object.assign(file, {
-          preview: URL.createObjectURL(file),
-          base: base64String
-        }))
+        const base64 = (reader.result as string).split(',');
+        const base64String = base64[base64.length-1];
+        setFile(
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+            base: base64String,
+          })
+        );
       };
 
       reader.readAsDataURL(file);
     }
-  }
+  };
+
+  const onSubmit = async (data: any) => {
+    setLoading(true);
+    await axios
+      .post(
+        `${import.meta.env.VITE_BASE_API_URL}/v1/animal/lost/report`,
+        {
+          ...data,
+          image: file?.base,
+          imageType: file?.type,
+        },
+        {
+          headers: {
+            Authorization: userState.accessToken,
+          },
+        }
+      )
+      .then((res) => {
+        reset();
+        setFile(undefined);
+        onClose();
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   return (
     <>
@@ -73,15 +106,16 @@ const AnimalReportModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () =
         <ModalContent maxW='800px'>
           <ModalHeader fontSize='24px' color='#5072E8' justifyContent='center'>
             <Flex align='center' gap='24px'>
-              {faCircleExclamationIcon} Reportar animal perdido
+              <FontAwesomeIcon icon={faCircleExclamation} size="2x" /> Reportar animal perdido
             </Flex>
           </ModalHeader>
           <ModalCloseButton />
+          <form onSubmit={handleSubmit(onSubmit)}>
           <ModalBody>
             <Flex direction='column' gap='16px'>
               <Flex direction='column'>
-                <Text fontSize='16px' color='#5072E8'>Localização</Text>
-                <Input value={watch("name")} onChange={(a) => setValue('name', a.target.value)} bgColor='#DFE4F6' focusBorderColor='#5072E8' />
+                <Text fontSize='16px' color='#5072E8' fontWeight="500">Ultima localização</Text>
+                <Input {...register("lastLocation")} bgColor='#DFE4F6' focusBorderColor='#5072E8' />
               </Flex>
               <Flex gap='16px'>
                 <Flex w='50%'>
@@ -117,14 +151,15 @@ const AnimalReportModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () =
               </Flex>
               <Flex direction='column'>
                 <Text color='#5072E8' fontWeight='600'>Texto do feed (opcional)</Text>
-                {watch('createPublication') ? <Textarea value={watch('feedText')} onChange={(a) => { setValue('feedText', a.target.value) }} /> : <Textarea disabled />}
+                {watch('createPublication') ? <Textarea {...register('publicationDescription')} /> : <Textarea disabled />}
               </Flex>
             </Flex>
           </ModalBody>
           <ModalFooter>
             <Button variant='outline' mr={3} onClick={close}>Cancelar</Button>
-            <Button variant='solid' bg='#5072E8' color='#fff' mr={3} onClick={close} isLoading={false} loadingText='Registrando...'>Registrar</Button>
+            <Button variant='solid' bg='#5072E8' color='#fff' mr={3} type="submit" isLoading={isLoading} loadingText='Registrando...'>Registrar</Button>
           </ModalFooter>
+          </form>
         </ModalContent>
       </Modal>
     </>

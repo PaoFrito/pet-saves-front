@@ -97,8 +97,6 @@ const AnimalRegisterModal = ({
 
   const onSubmit = async (data: any) => {
     setLoading(true);
-    console.log(data);
-    console.log(file);
     await axios
       .post(
         `${import.meta.env.VITE_BASE_API_URL}/v1/animal/sheltered/registration`,
@@ -115,9 +113,9 @@ const AnimalRegisterModal = ({
         }
       )
       .then((res) => {
-        onClose();
         reset();
         setFile(undefined);
+        onClose();
       })
       .catch((err) => {
         console.log(err);
@@ -230,7 +228,7 @@ const AnimalRegisterModal = ({
             </Flex>
             <Flex justifyContent="flex-end" mt="18px" gap="12px">
               <Button variant='outline' onClick={close}>Cancelar</Button>
-              <Button variant='solid' bg='#5072E8' color='#fff' type="submit" isDisabled={isLoading}>Registrar</Button>
+              <Button variant='solid' bg='#5072E8' color='#fff' type="submit" isLoading={isLoading} isDisabled={isLoading} loadingText='Registrando...'>Registrar</Button>
             </Flex>
           </form>
         </Box>
