@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { BaseLayout } from './components/BaseLayout'
 import { LoginPage } from './pages/Login'
 import { UserContextProvider } from './context/UserContext'
+import { useNavigate } from 'react-router-dom'
 import './style/base.css'
 
 import axios from 'axios';
@@ -13,7 +14,8 @@ axios.interceptors.response.use(
   response => response,
   error => {
     if (error.response.status === 401) {
-      window.location.replace('/login');
+      const navigate = useNavigate()
+      navigate("/login");
     }
     return Promise.reject(error);
   }

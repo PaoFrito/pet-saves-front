@@ -35,7 +35,7 @@ const AnimalRegisterModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
   const [isLoading, setLoading] = useState(false)
   const { userState } = useUserContext()
 
-  const { watch, setValue } = useForm<FormData>({
+  const { watch, setValue, reset } = useForm<FormData>({
     defaultValues: {
       feed: true,
     }
@@ -59,11 +59,12 @@ const AnimalRegisterModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
       }
     }).then((res) => {
       console.log(res)
-      onClose()
     }).catch((err) => {
       console.log(err)
     }).finally(() => {
       setLoading(false)
+      onClose()
+      reset()
     })
   }
 
@@ -130,7 +131,7 @@ const AnimalRegisterModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
           </ModalBody>
           <ModalFooter>
             <Button variant='outline' mr={3} onClick={onClose}>Cancelar</Button>
-            <Button variant='solid' bg='#5072E8' color='#fff' mr={3} onClick={onClose}>Registrar</Button>
+            <Button variant='solid' bg='#5072E8' color='#fff' mr={3} onClick={saveAnimal} isLoading={isLoading}>Registrar</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
