@@ -24,4 +24,5 @@ export type Post = {
     description?: string
     createdAt: number
     imageUrl: string
+    alreadyRequested: boolean
 };

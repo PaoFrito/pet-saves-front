@@ -52,6 +52,7 @@ export const Feed = () => {
             createdAt={x.createdAt}
             imageUrl={x.animal.imageUrl}
             description={x.description}
+            alreadyRequested={x.alreadyRequested}
           />
         ))
       )}
