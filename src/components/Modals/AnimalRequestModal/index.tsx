@@ -4,12 +4,13 @@ import { faShieldHeart } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect } from "react"
 import axios from "axios"
 import sadpug from '../../../assets/sadpug.webp'
+import { AnimalsToRequest } from '../../../model/AnimalsToRequest'
 
 const AnimalReqestModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
 
   const shieldHeartIcon = <FontAwesomeIcon icon={faShieldHeart} size="2x" />
 
-  const [animalList, setAnimalList] = useState<any>([])
+  const [animalList, setAnimalList] = useState<AnimalsToRequest[]>([])
 
   const fetchAnimalListData = () => {
     // axios.get(`${import.meta.env.VITE_BASE_API_URL}/v1/animal/`).then((res) => {
@@ -23,51 +24,51 @@ const AnimalReqestModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () =
     setAnimalList([
       {
         animal: {
-          id: '1',
+          id: 1,
           name: 'Rex',
           imageUrl: sadpug
         },
         requesters: [
           {
-            id: '1',
+            id: 1,
             imageUrl: sadpug
           },
           {
-            id: '2',
+            id: 2,
             imageUrl: sadpug
           }
         ]
       },
       {
         animal: {
-          id: '1',
+          id: 1,
           name: 'Rex',
           imageUrl: sadpug
         },
         requesters: [
           {
-            id: '1',
+            id: 1,
             imageUrl: sadpug
           },
           {
-            id: '2',
+            id: 2,
             imageUrl: sadpug
           }
         ]
       },
       {
         animal: {
-          id: '1',
+          id: 1,
           name: 'Rex',
           imageUrl: sadpug
         },
         requesters: [
           {
-            id: '1',
+            id: 1,
             imageUrl: sadpug
           },
           {
-            id: '2',
+            id: 2,
             imageUrl: sadpug
           }
         ]

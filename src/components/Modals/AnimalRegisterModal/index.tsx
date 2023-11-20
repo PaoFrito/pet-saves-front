@@ -69,6 +69,11 @@ const AnimalRegisterModal = ({
     },
   });
 
+  const close = () => {
+    reset()
+    onClose()
+  }
+
   const onDrop = (acceptedFiles: any) => {
     // Verifica se há pelo menos um arquivo
     if (acceptedFiles.length > 0) {
@@ -197,30 +202,16 @@ const AnimalRegisterModal = ({
                       onChange={(x: string) => setValue("type", x)}
                     />
                   </Flex>
-                  <Flex direction="column" gap="8px">
-                    <Text color="#5072E8" fontWeight="600">
-                      Tamanho
-                    </Text>
-                    <RadioGroup
-                      options={sizeOptions}
-                      name="tamanho"
-                      onChange={(x: any) => setValue("size", x)}
-                    />
+                  <Flex w='100%' direction='column' gap='8px'>
+                    <Text  color='#5072E8' fontWeight='600'>Tamanho</Text>
+                    <RadioGroup options={sizeOptions} name="tamanho" onChange={(x: any) => setValue('size', x)} />
                   </Flex>
                 </Flex>
-              </Flex>
-              <Flex gap="16px">
-                <Flex w="50%" align="flex-start" direction="column">
-                  <Text color="#5072E8" fontWeight="600">
-                    Publicação no feed
-                  </Text>
-                  <RadioGroup
-                    options={isToFeed}
-                    name="para o feed?"
-                    onChange={(x: any) => {
-                      setValue("createPublication", x === "Criar publicação");
-                    }}
-                  />
+              </Flex> 
+              <Flex gap='16px'>
+                <Flex w='50%' align='flex-start' direction='column'>
+                  <Text color='#5072E8' fontWeight='600'>Publicação no feed</Text>
+                  <RadioGroup options={isToFeed} name="para o feed?" onChange={(x: any) => { setValue('createPublication', x === 'Criar publicação') }} />
                 </Flex>
                 <Flex w="50%" align="flex-start" direction="column">
                   <Text color="#5072E8" fontWeight="600">
@@ -232,30 +223,14 @@ const AnimalRegisterModal = ({
                   </InputGroup>
                 </Flex>
               </Flex>
-              <Flex direction="column">
-                <Text color="#5072E8" fontWeight="600">
-                  Texto do feed (opcional)
-                </Text>
-                {watch("createPublication") ? (
-                  <Textarea {...register("publicationDescription")} />
-                ) : (
-                  <Textarea disabled />
-                )}
+              <Flex direction='column'>
+                <Text color='#5072E8' fontWeight='600'>Texto do feed (opcional)</Text>
+                {watch('createPublication') ? <Textarea {...register('publicationDescription')} /> : <Textarea disabled />}
               </Flex>
             </Flex>
             <Flex justifyContent="flex-end" mt="18px" gap="12px">
-              <Button variant="outline" onClick={onClose}>
-                Cancelar
-              </Button>
-              <Button
-                variant="solid"
-                bg="#5072E8"
-                color="#fff"
-                type="submit"
-                isDisabled={isLoading}
-              >
-                Registrar
-              </Button>
+              <Button variant='outline' onClick={close}>Cancelar</Button>
+              <Button variant='solid' bg='#5072E8' color='#fff' type="submit" isDisabled={isLoading}>Registrar</Button>
             </Flex>
           </form>
         </Box>
