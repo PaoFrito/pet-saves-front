@@ -14,7 +14,7 @@ export const Feed = () => {
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get("http://localhost:3000/v1/animal/feed", {
+      const response = await axios.get(`${import.meta.env.VITE_BASE_API_URL}/v1/animal/feed`, {
         headers: {
           Authorization: userState.accessToken,
         },
@@ -49,6 +49,7 @@ export const Feed = () => {
             animalType={x.animal.type}
             animalStatus={x.animal.status}
             authorName={x.author.username}
+            authorId={x.author.id}
             authorUrl={x.author.imageUrl}
             createdAt={x.createdAt}
             imageUrl={x.animal.imageUrl}
