@@ -20,6 +20,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "axios": "^1.6.2",
+    "dotenv": "^16.3.1",
     "framer-motion": "^10.16.5",
     "moment": "^2.29.4",
     "react": "^18.2.0",
@@ -29,6 +30,7 @@
     "react-router-dom": "^6.19.0"
   },
   "devDependencies": {
+    "@types/node": "^20.9.2",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@typescript-eslint/eslint-plugin": "^6.10.0",

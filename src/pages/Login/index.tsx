@@ -1,46 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { Flex, Box, Image, Text, Input, Stack, Button } from "@chakra-ui/react"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faX } from '@fortawesome/free-solid-svg-icons'
-import { validateEmail } from "../../utils"
 import useUserContext from '../../hooks/useUserContext';
 import logo from "../../assets/logo.png"
 
 export const LoginPage = () => {
-
+    
     const navigate = useNavigate()
+    const { login, userState } = useUserContext()
 
-    const [emailInvalid, setEmailInvalid] = useState<boolean>(false)
-    const [passwordInvalid, setPasswordInvalid] = useState<boolean>(false)
     const [submitBtnLoading, setSubmitBtnLoading] = useState<boolean>(false)
-    const [TwitterSubmitBtnLoading, setTwitterSubmitBtnLoading] = useState<boolean>(false)
-    const [GoogleSubmitBtnLoading, setGoogleSubmitBtnLoading] = useState<boolean>(false)
 
-    const [email, setEmail] = useState<string>('')
+    const [username, setUsername] = useState<string>('')
     const [password, setPassword] = useState<string>('')
 
-    const TwitterIcon = <FontAwesomeIcon icon={faX} />
-    const GoogleIcon = <FontAwesomeIcon icon={faX} />
-
-    const validatePassword = () => {
-        if(password === '' || password.length < 6)
-            setPasswordInvalid(true)
-        else
-            setPasswordInvalid(false)
-    }
-
-    const { login } = useUserContext()
+    useEffect(() => {
+        if(userState.id !== ''){
+            console.log(useState)
+            navigate("/");
+        }
+    }, [])
 
     const submit = async () => {
         setSubmitBtnLoading(true)
-        setEmailInvalid(!validateEmail(email))
-        validatePassword()
-        login({credentials: {email: email, password: password}}).then(()=>{
+        login({credentials: {username, password}}).then(()=>{
             setSubmitBtnLoading(false)
             navigate("/")
         }).catch((e)=>{
             alert(e)
+            setSubmitBtnLoading(false)
         })
     }
 
@@ -53,15 +41,13 @@ export const LoginPage = () => {
                     <Text w='100%' fontSize='36px' color='#fff' fontWeight='600' textAlign='left'>Bem-vindo</Text>
                     <Stack spacing={3} w='100%' mt='15%'>
                         <Box w='100%'>
-                            <Text color='#fff' fontSize='16'>E-mail</Text>
+                            <Text color='#fff' fontSize='16'>Usuário</Text>
                             <Input 
-                                value={email}
-                                onChange={(a) => setEmail(a.target.value)}
-                                type="email"
+                                value={username}
+                                onChange={(a) => setUsername(a.target.value)}
                                 color='#fff'
-                                isInvalid={emailInvalid}
-                                focusBorderColor='#000'
-                                errorBorderColor='red.500'
+                                focusBorderColor='#e5e5e5'
+                                errorBorderColor='red.300'
                             />
                         </Box>
                         <Box w='100%'>
@@ -71,10 +57,8 @@ export const LoginPage = () => {
                                 onChange={(a) => setPassword(a.target.value)}
                                 type="password"
                                 color='#fff'
-                                placeholder='min. 6 caracteres'
                                 _placeholder={{ color: 'gray.400' }}
-                                isInvalid={passwordInvalid}
-                                focusBorderColor='#000'
+                                focusBorderColor='#e5e5e5'
                                 errorBorderColor='red.500'
                             />
                         </Box>
@@ -91,26 +75,20 @@ export const LoginPage = () => {
                     <Button
                         w='100%'
                         mt='36px'
-                        bgColor='#242C37'
+                        bgColor='#5c708b'
                         color='#FFFFFF'
-                        isLoading={TwitterSubmitBtnLoading}
-                        loadingText='Enviando'
-                        leftIcon={TwitterIcon}
-                        onClick={()=>{setTwitterSubmitBtnLoading(true)}}
+                        isDisabled={true}
                     >
-                            Entrar com o Twitter
+                            Login com Twitter
                     </Button>
                     <Button
                         w='100%'
                         mt='16px' 
-                        bgColor='#242C37'
+                        bgColor='#5c708b'
                         color='#FFFFFF'
-                        isLoading={GoogleSubmitBtnLoading}
-                        loadingText='Enviando'
-                        leftIcon={GoogleIcon}
-                        onClick={()=>{setGoogleSubmitBtnLoading(true)}}
+                        isDisabled={true}
                     >
-                            Entrar com o Google
+                            Login com Google
                     </Button>
                 </Flex>
             </main>

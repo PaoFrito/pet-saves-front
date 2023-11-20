@@ -7,6 +7,18 @@ import { LoginPage } from './pages/Login'
 import { UserContextProvider } from './context/UserContext'
 import './style/base.css'
 
+import axios from 'axios';
+
+axios.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response.status === 401) {
+      window.location.replace('/login');
+    }
+    return Promise.reject(error);
+  }
+);
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ChakraProvider>
@@ -21,3 +33,4 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </ChakraProvider>
   </React.StrictMode>
 )
+

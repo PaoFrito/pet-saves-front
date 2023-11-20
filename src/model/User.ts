@@ -1,5 +1,7 @@
 export type User = {
     id: string;
-    img: string;
-    name: string;
+    email: string;
+    username: string;
+    imageUrl: string;
+    accessToken: string;
 };
