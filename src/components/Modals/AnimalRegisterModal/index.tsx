@@ -1,10 +1,12 @@
 import { useForm } from "react-hook-form"
-import { Textarea, InputGroup, InputRightAddon, Alert, AlertIcon, AlertTitle, AlertDescription, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Flex, Text, Input } from "@chakra-ui/react"
+import { Textarea, InputGroup, InputRightAddon, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Flex, Text, Input } from "@chakra-ui/react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaw } from '@fortawesome/free-solid-svg-icons'
 import RadioGroup from "../../RadioGroup"
 import { SelectSpecies } from "../../../model/Enum/SpeciesEnum"
 import { useState } from "react"
+import axios from "axios"
+import useUserContext from "../../../hooks/useUserContext"
 
 enum Size {
   sm = 'Pequeno',
@@ -29,8 +31,9 @@ type FormData = {
   feedText: string
 }
 
-const AnimalReportModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
-  const [alert] = useState(false)
+const AnimalRegisterModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
+  const [isLoading, setLoading] = useState(false)
+  const { userState } = useUserContext()
 
   const { watch, setValue } = useForm<FormData>({
     defaultValues: {
@@ -40,17 +43,32 @@ const AnimalReportModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () =
 
   const faPawIcon = <FontAwesomeIcon icon={faPaw} size="2x" />
 
+  const saveAnimal = async () => {
+    setLoading(true)
+    await axios.post('https://4nzl4z2be6.execute-api.us-east-1.amazonaws.com/dev/v1/animal/sheltered/registration', {
+      name: watch('name'),
+      img: watch('img'),
+      specie: watch('specie'),
+      size: watch('size'),
+      age: watch('age'),
+      feed: watch('feed'),
+      feedText: watch('feedText')
+    }, {
+      headers: {
+        Authorization: userState.accessToken,
+      }
+    }).then((res) => {
+      console.log(res)
+      onClose()
+    }).catch((err) => {
+      console.log(err)
+    }).finally(() => {
+      setLoading(false)
+    })
+  }
+
   return (
     <>
-      {
-        alert ?
-          <Alert status='error'>
-            <AlertIcon />
-            <AlertTitle>file error</AlertTitle>
-            <AlertDescription>file is not a img.</AlertDescription>
-          </Alert>
-          : null
-      }
 
       <Modal isOpen={isOpen} onClose={onClose} size='xl'>
         <ModalOverlay />
@@ -120,4 +138,4 @@ const AnimalReportModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () =
   )
 }
 
-export default AnimalReportModal
+export default AnimalRegisterModal

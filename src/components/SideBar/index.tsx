@@ -17,7 +17,7 @@ import {
 	faCircleInfo,
 } from "@fortawesome/free-solid-svg-icons";
 import useUserContext from "../../hooks/useUserContext";
-import AnimalRescueModal from "../Modals/AnimalRescueModal"
+import AnimalRescueModal from "../Modals/AnimalRegisterModal"
 import AnimalRequestModal from "../Modals/AnimalRequestModal"
 import AnimalReportModal from "../Modals/AnimalReportModal"
 import { useDisclosure } from "@chakra-ui/hooks"

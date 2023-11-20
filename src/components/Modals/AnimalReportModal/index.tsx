@@ -1,38 +1,42 @@
 import { useForm } from "react-hook-form"
-import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Flex, Text, Input, Img } from "@chakra-ui/react"
+import { Textarea, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Flex, Text, Input } from "@chakra-ui/react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPaw } from '@fortawesome/free-solid-svg-icons'
-import img from '../../..//assets/img-base.svg'
+import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import RadioGroup from "../../RadioGroup"
-import Dropzone from 'react-dropzone'
 import { SelectSpecies } from "../../../model/Enum/SpeciesEnum"
 
+enum Size {
+  sm = 'Pequeno',
+  md = 'Medio',
+  lg = 'Grande'
+}
+
+const sizeOptions = [{ label: Size.sm, icon: undefined },
+{ label: Size.md, icon: undefined },
+{ label: Size.lg, icon: undefined }]
+
+const isToFeed = [{ label: 'Criar publicação', icon: undefined },
+{ label: 'Não criar publicação', icon: undefined }]
 
 type FormData = {
   name: string
   img: string
   specie: string
-  size: 'sm' | 'md '| 'lg'
-  ate: number
+  size: Size
+  age: number
   feed: boolean
   feedText: string
 }
 
-const AnimalRescueModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
+const AnimalReportModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
 
-  const { register, getValues, setValue } = useForm<FormData>({
-    defaultValues:{
-      name : '',
-      img: '',
-      specie: '',
-      size: 'sm',
-      ate: 0,
-      feed: false,
-      feedText: 'string'
+  const { watch, setValue } = useForm<FormData>({
+    defaultValues: {
+      feed: true,
     }
   })
 
-  const faPawIcon = <FontAwesomeIcon icon={faPaw} size="2x" />
+  const faCircleExclamationIcon = <FontAwesomeIcon icon={faCircleExclamation} size="2x" />
 
   return (
     <>
@@ -41,42 +45,55 @@ const AnimalRescueModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () =
         <ModalContent>
           <ModalHeader fontSize='24px' color='#5072E8' justifyContent='center'>
             <Flex align='center' gap='24px'>
-              {faPawIcon} Registrar animal acolhido
+              {faCircleExclamationIcon} Reportar animal perdido
             </Flex>
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Flex direction='column' gap='16px'>
               <Flex direction='column'>
-                <Text fontSize='16px'>Nome do animal</Text>
-                <Input value={getValues("name")} onChange={(a) => setValue('name', a.target.value)} bgColor='#DFE4F6' focusBorderColor='#5072E8' />
+                <Text fontSize='16px'>Localização</Text>
+                <Input value={watch("name")} onChange={(a) => setValue('name', a.target.value)} bgColor='#DFE4F6' focusBorderColor='#5072E8' />
               </Flex>
               <Flex gap='16px'>
                 <Flex w='50%'>
-                <Dropzone onDrop={acceptedFiles => console.log(acceptedFiles)}>
-                  {({getRootProps, getInputProps}) => (
-                    <section>
-                      <div {...getRootProps()}>
-                        <input {...getInputProps()} />
-                        <p>Drag 'n' drop some files here, or click to select files</p>
-                      </div>
-                    </section>
-                  )}
-                </Dropzone>
+                  {/* <Dropzone onDrop={file => validadeFile(file)}>
+                    {({ getRootProps, getInputProps }) => (
+                      <section>
+                        <div {...getRootProps()}>
+                          <input {...getInputProps()} />
+                          <p>Drag 'n' drop some files here, or click to select files</p>
+                        </div>
+                      </section>
+                    )}
+                  </Dropzone> */}
                 </Flex>
-                <Flex w='50%' align='flex-start'>
-                  <RadioGroup options={SelectSpecies} name="especies" onChange={(x:string)=>setValue('specie', x)}/>
-                  <Button variant='outline' mr={3} onClick={print}>print</Button>
+                <Flex w='50%' align='flex-start' direction='column' gap='16px'>
+                  <Flex w='100%' direction='column' gap='8px'>
+                    <Text color='#5072E8' fontWeight='600'>Espécie</Text>
+                    <RadioGroup options={SelectSpecies} name="especies" onChange={(x: string) => setValue('specie', x)} />
+                  </Flex>
+                  <Flex direction='column' gap='8px'>
+                    <Text color='#5072E8' fontWeight='600'>Tamanho</Text>
+                    <RadioGroup options={sizeOptions} name="tamanho" onChange={(x: any) => setValue('size', x)} />
+                  </Flex>
                 </Flex>
               </Flex>
-              <Flex>
-
+              <Flex gap='16px'>
+                <Flex w='100%' align='flex-start' direction='column'>
+                  <Text color='#5072E8' fontWeight='600'>Publicação no feed</Text>
+                  <RadioGroup options={isToFeed} name="para o feed?" onChange={(x: any) => { setValue('feed', x === 'Criar publicação') }} />
+                </Flex>
+              </Flex>
+              <Flex direction='column'>
+                <Text color='#5072E8' fontWeight='600'>Texto do feed (opcional)</Text>
+                {watch('feed') ? <Textarea value={watch('feedText')} onChange={(a) => { setValue('feedText', a.target.value) }} /> : <Textarea disabled />}
               </Flex>
             </Flex>
           </ModalBody>
           <ModalFooter>
             <Button variant='outline' mr={3} onClick={onClose}>Cancelar</Button>
-            <Button variant='solid' bg='#5072E8' color='#fff' mr={3} onClick={onClose}>Registrar</Button>
+            <Button variant='solid' bg='#5072E8' color='#fff' mr={3} onClick={onClose} isLoading={false} loadingText='Registrando...'>Registrar</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -84,4 +101,4 @@ const AnimalRescueModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () =
   )
 }
 
-export default AnimalRescueModal
+export default AnimalReportModal
