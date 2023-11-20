@@ -1,6 +1,6 @@
 export type AnimalsToRequest = {
   animal: Animal
-  requesters: Requester[]
+  requests: Requester[]
 }
 
 type Animal = {
