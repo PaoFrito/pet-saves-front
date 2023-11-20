@@ -11,6 +11,7 @@ interface PostProps{
     animalName: string;
     animalSize: string;
     animalType: string;
+    animalStatus: string;
     animalAge?: number;
     animalId: string;
     description?: string;
@@ -18,7 +19,7 @@ interface PostProps{
     alreadyRequested: boolean;
 }
 
-export const Post = ({createdAt, authorUrl, authorName, animalName, animalSize, animalType, animalAge, animalId, description, imageUrl, alreadyRequested}: PostProps) =>{
+export const Post = ({createdAt, authorUrl, authorName, animalName, animalSize, animalType, animalAge, animalId, description, imageUrl, alreadyRequested, animalStatus}: PostProps) =>{
     const { userState } = useUserContext();
 
     const [isLoading, setIsLoading] = useState(false);
@@ -95,7 +96,7 @@ export const Post = ({createdAt, authorUrl, authorName, animalName, animalSize, 
                     </Flex>
                 </Flex>
                 <Flex flexDir="column" textAlign="right">
-                    <Text fontSize="16px" fontWeight="500">{translateSize(animalSize)} {translateType(animalType)} {animalName}</Text>
+                    <Text fontSize="16px" fontWeight="500">{translateSize(animalSize)} {translateType(animalType)} {animalStatus === 'lost' ? 'Perdido' : animalName}</Text>
                     <Flex fontSize="14px" gap="3px" marginLeft="auto">
                         <Text>{animalAge ? `${animalAge} semanas de idade •` : ''} </Text>
                         <Button fontSize="14px" isDisabled={isLoading || isRequested} isLoading={isLoading} loadingText='Solicitando' backgroundColor='transparent' p="6px" h="20px" color="#5072E8" fontWeight="500" cursor="pointer" textAlign="right" onClick={requestAdoption}>{isRequested ? 'Solicitado' :'Solicitar Adoção'}</Button>

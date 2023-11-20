@@ -47,6 +47,7 @@ export const Feed = () => {
             animalName={x.animal.name}
             animalSize={x.animal.size}
             animalType={x.animal.type}
+            animalStatus={x.animal.status}
             authorName={x.author.username}
             authorUrl={x.author.imageUrl}
             createdAt={x.createdAt}

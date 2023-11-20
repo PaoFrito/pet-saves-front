@@ -12,10 +12,10 @@ const AnimalReqestModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () =
   const [animalList, setAnimalList] = useState<any>([])
 
   const fetchAnimalListData = () => {
-    axios.get(`${import.meta.env.VITE_BASE_API_URL}/v1/animal/`).then((res) => {
-      console.log(res.data)
-      setAnimalList(res.data)
-    })
+    // axios.get(`${import.meta.env.VITE_BASE_API_URL}/v1/animal/`).then((res) => {
+    //   console.log(res.data)
+    //   setAnimalList(res.data)
+    // })
   }
 
   useEffect(() => {
