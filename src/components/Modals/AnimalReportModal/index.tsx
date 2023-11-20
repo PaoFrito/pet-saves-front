@@ -8,7 +8,6 @@ import Dropzone from "react-dropzone"
 import { useState } from "react"
 import useUserContext from "../../../hooks/useUserContext"
 import axios from "axios"
-import { useNavigate } from "react-router-dom"
 
 enum Size {
   sm = 'small',
