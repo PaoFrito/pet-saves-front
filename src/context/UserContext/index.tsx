@@ -8,7 +8,7 @@ type Credentials = {
 };
 
 export type UserContextProps = {
-  userState?: User;
+  userState: User;
   login: ({ credentials }: { credentials: Credentials }) => Promise<void>;
   logout: () => void;
 };
@@ -32,14 +32,13 @@ const DEFAULT_VALUES = {
 const UserContext = createContext<UserContextProps>(DEFAULT_VALUES);
 
 const UserContextProvider = ({ children }: UserContextProviderProps) => {
-//   const [userState, setUserState] = useState<User>({
-//     ...DEFAULT_VALUES.userState,
-//   });
-  const [userState, setUserState] = useState<User>();
+  const [userState, setUserState] = useState<User>({
+    ...DEFAULT_VALUES.userState,
+  });
 
-  if(!userState){
+  if(!userState.accessToken || userState.accessToken === ''){
     const userStorage = localStorage.getItem('user')
-    if(userStorage && !userState){
+    if(userStorage){
       setUserState(JSON.parse(userStorage))
     }
   }
@@ -68,7 +67,8 @@ const UserContextProvider = ({ children }: UserContextProviderProps) => {
 
   const logout = () => {
     localStorage.removeItem("user");
-    setUserState(undefined);
+    setUserState(DEFAULT_VALUES.userState);
+    window.location.replace('/login');
   };
 
   return (

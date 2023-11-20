@@ -9,15 +9,13 @@ export const LoginPage = () => {
     const navigate = useNavigate()
     const { login, userState } = useUserContext()
 
-    
-
     const [submitBtnLoading, setSubmitBtnLoading] = useState<boolean>(false)
 
     const [username, setUsername] = useState<string>('')
     const [password, setPassword] = useState<string>('')
 
     useEffect(() => {
-        if(userState?.id){
+        if(userState.id !== ''){
             console.log(useState)
             navigate("/");
         }
