@@ -24,6 +24,7 @@ import { useState } from "react";
 import axios from "axios";
 import useUserContext from "../../../hooks/useUserContext";
 import Dropzone from "react-dropzone";
+import { useNavigate } from "react-router-dom";
 
 enum Size {
   sm = "small",
@@ -60,7 +61,7 @@ const AnimalRegisterModal = ({
 }) => {
   const [isLoading, setLoading] = useState(false);
   const { userState } = useUserContext();
-  const [file, setFile] = useState();
+  const [file, setFile] = useState<object & {preview: string, base: string, type: string}>();
   const { watch, setValue, handleSubmit, register, reset } = useForm<FormData>({
     defaultValues: {
       createPublication: true,
@@ -94,7 +95,6 @@ const AnimalRegisterModal = ({
       reader.readAsDataURL(file);
     }
   };
-
   const onSubmit = async (data: any) => {
     setLoading(true);
     await axios
@@ -112,10 +112,11 @@ const AnimalRegisterModal = ({
           },
         }
       )
-      .then((res) => {
+      .then(() => {
         reset();
         setFile(undefined);
         onClose();
+        window.location.replace("/");
       })
       .catch((err) => {
         console.log(err);

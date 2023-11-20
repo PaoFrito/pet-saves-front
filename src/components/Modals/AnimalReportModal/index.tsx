@@ -8,6 +8,7 @@ import Dropzone from "react-dropzone"
 import { useState } from "react"
 import useUserContext from "../../../hooks/useUserContext"
 import axios from "axios"
+import { useNavigate } from "react-router-dom"
 
 enum Size {
   sm = 'small',
@@ -35,7 +36,7 @@ type FormData = {
 const AnimalReportModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
   const [isLoading, setLoading] = useState(false);
   const { userState } = useUserContext();
-  const [file, setFile] = useState();
+  const [file, setFile] = useState<object & {preview: string, base: string, type: string}>();
   const { watch, setValue, handleSubmit, register, reset } = useForm<FormData>({
     defaultValues: {
       createPublication: true,
@@ -69,7 +70,6 @@ const AnimalReportModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () =
       reader.readAsDataURL(file);
     }
   };
-
   const onSubmit = async (data: any) => {
     setLoading(true);
     await axios
@@ -86,10 +86,11 @@ const AnimalReportModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () =
           },
         }
       )
-      .then((res) => {
+      .then(() => {
         reset();
         setFile(undefined);
         onClose();
+        window.location.replace("/");
       })
       .catch((err) => {
         console.log(err);

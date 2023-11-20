@@ -84,7 +84,7 @@ const AnimalReqestModal = ({
                     </Text>
                     <Flex direction="row" gap="8px" wrap="wrap">
                       {animal.requests.map((requester: any) => (
-                        <Avatar src={requester.imageUrl} w="50px" h="50px" />
+                        <Avatar src={requester.imageUrl} name={requester.name} w="50px" h="50px" />
                       ))}
                     </Flex>
                   </Flex>
