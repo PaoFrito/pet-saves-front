@@ -7,9 +7,10 @@ const RadioCard = (props: any) => {
   const checkbox = getRadioProps()
 
   return (
-    <Box as='label' w='100%'>
+    <Flex as='label' w='100%'>
       <input {...input} />
-      <Box
+      <Flex
+        w='100%'
         {...checkbox}
         cursor='pointer'
         borderWidth='1px'
@@ -32,14 +33,14 @@ const RadioCard = (props: any) => {
         py={3}
       >
         {props.children}
-      </Box>
-    </Box>
+      </Flex>
+    </Flex>
   )
 }
 
 export type RadioOptions = {
   label: string,
-  icon: JSX.Element | undefined
+  icon: JSX.Element | undefined | string
 }
 
 const RadioGroup = ({ options, name, onChange }: { options: RadioOptions[], name: string, onChange: CallableFunction }) => {
@@ -58,7 +59,7 @@ const RadioGroup = ({ options, name, onChange }: { options: RadioOptions[], name
         const radio = getRadioProps({value:value.label})
         return (
           <RadioCard key={value} {...radio}>
-            <Flex direction='column' align='center'>
+            <Flex direction='column' align='center' borderRadius='4px' w='100%'>
               {value.icon}
               {value.label}
             </Flex>
