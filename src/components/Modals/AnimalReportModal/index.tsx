@@ -1,14 +1,16 @@
 import { useForm } from "react-hook-form"
-import { Textarea, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Flex, Text, Input } from "@chakra-ui/react"
+import { Grid, Box, Textarea, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Flex, Text, Input } from "@chakra-ui/react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import RadioGroup from "../../RadioGroup"
 import { SelectSpecies } from "../../../model/Enum/SpeciesEnum"
+import Dropzone from "react-dropzone"
+import { useState } from "react"
 
 enum Size {
-  sm = 'Pequeno',
-  md = 'Medio',
-  lg = 'Grande'
+  sm = 'small',
+  md = 'medium',
+  lg = 'big'
 }
 
 const sizeOptions = [{ label: Size.sm, icon: undefined },
@@ -24,23 +26,49 @@ type FormData = {
   type: string
   size: Size
   ageInMonths: number
-  feed: boolean
+  createPublication: boolean
   feedText: string
 }
 
 const AnimalReportModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
+  const faCircleExclamationIcon = <FontAwesomeIcon icon={faCircleExclamation} size="2x" />
 
-  const { watch, setValue } = useForm<FormData>({
+  const { watch, setValue, reset } = useForm<FormData>({
     defaultValues: {
-      feed: true,
+      type: 'dog',
+      size: Size.sm,
+      createPublication: true
     }
   })
 
-  const faCircleExclamationIcon = <FontAwesomeIcon icon={faCircleExclamation} size="2x" />
+  const close = () => {
+    reset()
+    onClose()
+  }
+
+  const [file, setFile] = useState()
+  
+  const onDrop = (acceptedFiles: any) => {
+    // Verifica se há pelo menos um arquivo
+    if (acceptedFiles.length > 0) {
+      const file = acceptedFiles[0];
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64String = reader.result;
+        setFile(Object.assign(file, {
+          preview: URL.createObjectURL(file),
+          base: base64String
+        }))
+      };
+
+      reader.readAsDataURL(file);
+    }
+  }
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+      <Modal isOpen={isOpen} onClose={close} size="xl">
         <ModalOverlay />
         <ModalContent maxW='800px'>
           <ModalHeader fontSize='24px' color='#5072E8' justifyContent='center'>
@@ -52,28 +80,30 @@ const AnimalReportModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () =
           <ModalBody>
             <Flex direction='column' gap='16px'>
               <Flex direction='column'>
-                <Text fontSize='16px'>Localização</Text>
+                <Text fontSize='16px' color='#5072E8'>Localização</Text>
                 <Input value={watch("name")} onChange={(a) => setValue('name', a.target.value)} bgColor='#DFE4F6' focusBorderColor='#5072E8' />
               </Flex>
               <Flex gap='16px'>
                 <Flex w='50%'>
-                  {/* <Dropzone onDrop={file => validadeFile(file)}>
+                <Dropzone onDrop={files => onDrop(files)} maxFiles={1} accept={{
+                    'image/*': [],
+                  }}>
                     {({ getRootProps, getInputProps }) => (
-                      <section>
-                        <div {...getRootProps()}>
+                      <Box w="100%" h="100%" backgroundColor="transparent" borderRadius="5px" border='2px dashed #5072E8' cursor="pointer" _hover={{ backgroundColor: '#00000012' }}>
+                        <Grid {...getRootProps({ className: 'dropzone', onDrop: event => event.stopPropagation() })} w="100%" h="100%" placeContent="center">
                           <input {...getInputProps()} />
-                          <p>Drag 'n' drop some files here, or click to select files</p>
-                        </div>
-                      </section>
+                          {!file?.preview ? <Text color="#5072E8" fontWeight="500">Arraste uma foto do animal</Text> : <Img src={file?.preview} w="400px" h="200px" />}
+                        </Grid>
+                      </Box>
                     )}
-                  </Dropzone> */}
+                  </Dropzone>
                 </Flex>
                 <Flex w='50%' align='flex-start' direction='column' gap='16px'>
                   <Flex w='100%' direction='column' gap='8px'>
                     <Text color='#5072E8' fontWeight='600'>Espécie</Text>
-                    <RadioGroup options={SelectSpecies} name="especies" onChange={(x: string) => setValue('specie', x)} />
+                    <RadioGroup options={SelectSpecies} name="especies" onChange={(x: string) => setValue('type', x)} />
                   </Flex>
-                  <Flex direction='column' gap='8px'>
+                  <Flex w='100%' direction='column' gap='8px'>
                     <Text color='#5072E8' fontWeight='600'>Tamanho</Text>
                     <RadioGroup options={sizeOptions} name="tamanho" onChange={(x: any) => setValue('size', x)} />
                   </Flex>
@@ -82,18 +112,18 @@ const AnimalReportModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () =
               <Flex gap='16px'>
                 <Flex w='100%' align='flex-start' direction='column'>
                   <Text color='#5072E8' fontWeight='600'>Publicação no feed</Text>
-                  <RadioGroup options={isToFeed} name="para o feed?" onChange={(x: any) => { setValue('feed', x === 'Criar publicação') }} />
+                  <RadioGroup options={isToFeed} name="para o feed?" onChange={(x: any) => { setValue('createPublication', x === 'Criar publicação') }} />
                 </Flex>
               </Flex>
               <Flex direction='column'>
                 <Text color='#5072E8' fontWeight='600'>Texto do feed (opcional)</Text>
-                {watch('feed') ? <Textarea value={watch('feedText')} onChange={(a) => { setValue('feedText', a.target.value) }} /> : <Textarea disabled />}
+                {watch('createPublication') ? <Textarea value={watch('feedText')} onChange={(a) => { setValue('feedText', a.target.value) }} /> : <Textarea disabled />}
               </Flex>
             </Flex>
           </ModalBody>
           <ModalFooter>
-            <Button variant='outline' mr={3} onClick={onClose}>Cancelar</Button>
-            <Button variant='solid' bg='#5072E8' color='#fff' mr={3} onClick={onClose} isLoading={false} loadingText='Registrando...'>Registrar</Button>
+            <Button variant='outline' mr={3} onClick={close}>Cancelar</Button>
+            <Button variant='solid' bg='#5072E8' color='#fff' mr={3} onClick={close} isLoading={false} loadingText='Registrando...'>Registrar</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

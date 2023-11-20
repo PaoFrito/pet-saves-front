@@ -43,11 +43,16 @@ const AnimalRegisterModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
     }
   })
 
+  const close = () => {
+    reset()
+    onClose()
+  }
+
   const onDrop = (acceptedFiles: any) => {
     // Verifica se há pelo menos um arquivo
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0];
-      
+
       const reader = new FileReader();
       reader.onload = () => {
         const base64String = reader.result;
@@ -56,40 +61,39 @@ const AnimalRegisterModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
           base: base64String
         }))
       };
-      
+
       reader.readAsDataURL(file);
     }
   };
-  
+
   const onSubmit = async (data: any) => {
     setLoading(true)
     console.log(data)
-    await axios.post(`${import.meta.env.VITE_BASE_API_URL}/v1/animal/sheltered/registration`, {...data, ageInMonths: Number(data.ageInMonths), imageUrl: file?.base}, {
+    await axios.post(`${import.meta.env.VITE_BASE_API_URL}/v1/animal/sheltered/registration`, { ...data, ageInMonths: Number(data.ageInMonths), imageUrl: file?.base }, {
       headers: {
         Authorization: userState.accessToken,
       }
     }).then((res) => {
-      onClose()
-      reset()
       setFile(undefined)
     }).catch((err) => {
       console.log(err)
     }).finally(() => {
+      close()
       setLoading(false)
     })
   }
 
   return (
-      <Modal isOpen={isOpen} onClose={onClose} size='xl'>
-        <ModalOverlay />
-        <ModalContent maxW="900px">
-          <ModalHeader fontSize='24px' color='#5072E8' justifyContent='center'>
-            <Flex align='center' gap='24px'>
-              <FontAwesomeIcon icon={faPaw} size="2x" /> Registrar animal acolhido
-            </Flex>
-          </ModalHeader>
-          <ModalCloseButton />
-          <Box p="14px 28px">
+    <Modal isOpen={isOpen} onClose={close} size='xl'>
+      <ModalOverlay />
+      <ModalContent maxW="900px">
+        <ModalHeader fontSize='24px' color='#5072E8' justifyContent='center'>
+          <Flex align='center' gap='24px'>
+            <FontAwesomeIcon icon={faPaw} size="2x"/> Registrar animal acolhido
+          </Flex>
+        </ModalHeader>
+        <ModalCloseButton />
+        <Box p="14px 28px">
           <form onSubmit={handleSubmit(onSubmit)}>
             <Flex direction='column' gap='16px'>
               <Flex direction='column'>
@@ -98,32 +102,30 @@ const AnimalRegisterModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
               </Flex>
               <Flex gap='16px'>
                 <Flex w='50%'>
-                
-                
-                <Dropzone onDrop={files => onDrop(files)} maxFiles={1}  accept={{
-    'image/*': [],
-  }}>
-                  {({getRootProps, getInputProps}) => (
-                    <Box w="100%" h="100%" backgroundColor="transparent" borderRadius="5px" border='2px dashed #5072E8' cursor="pointer" _hover={{backgroundColor: '#00000012'}}>
-                    <Grid {...getRootProps({className: 'dropzone', onDrop: event => event.stopPropagation()})} w="100%" h="100%" placeContent="center">
-                      <input {...getInputProps()} />
-                      {!file?.preview ? <Text color="#5072E8" fontWeight="500">Arraste uma foto do animal</Text> : <Img src={file?.preview} w="400px" h="200px"/>}
-                    </Grid> 
-                  </Box>
-                  )}
-                </Dropzone>
+                  <Dropzone onDrop={files => onDrop(files)} maxFiles={1} accept={{
+                    'image/*': [],
+                  }}>
+                    {({ getRootProps, getInputProps }) => (
+                      <Box w="100%" h="100%" backgroundColor="transparent" borderRadius="5px" border='2px dashed #5072E8' cursor="pointer" _hover={{ backgroundColor: '#00000012' }}>
+                        <Grid {...getRootProps({ className: 'dropzone', onDrop: event => event.stopPropagation() })} w="100%" h="100%" placeContent="center">
+                          <input {...getInputProps()} />
+                          {!file?.preview ? <Text color="#5072E8" fontWeight="500">Arraste uma foto do animal</Text> : <Img src={file?.preview} w="400px" h="200px" />}
+                        </Grid>
+                      </Box>
+                    )}
+                  </Dropzone>
                 </Flex>
                 <Flex w='50%' align='flex-start' direction='column' gap='16px'>
                   <Flex w='100%' direction='column' gap='8px'>
                     <Text color='#5072E8' fontWeight='600'>Espécie</Text>
                     <RadioGroup options={SelectSpecies} name="especies" onChange={(x: string) => setValue('type', x)} />
                   </Flex>
-                  <Flex direction='column' gap='8px'>
-                    <Text color='#5072E8' fontWeight='600'>Tamanho</Text>
+                  <Flex w='100%' direction='column' gap='8px'>
+                    <Text  color='#5072E8' fontWeight='600'>Tamanho</Text>
                     <RadioGroup options={sizeOptions} name="tamanho" onChange={(x: any) => setValue('size', x)} />
                   </Flex>
                 </Flex>
-              </Flex>
+              </Flex> 
               <Flex gap='16px'>
                 <Flex w='50%' align='flex-start' direction='column'>
                   <Text color='#5072E8' fontWeight='600'>Publicação no feed</Text>
@@ -139,17 +141,17 @@ const AnimalRegisterModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
               </Flex>
               <Flex direction='column'>
                 <Text color='#5072E8' fontWeight='600'>Texto do feed (opcional)</Text>
-                {watch('createPublication') ? <Textarea {...register('publicationDescription')} /> : <Textarea disabled/>}
+                {watch('createPublication') ? <Textarea {...register('publicationDescription')} /> : <Textarea disabled />}
               </Flex>
             </Flex>
             <Flex justifyContent="flex-end" mt="18px" gap="12px">
-              <Button variant='outline' onClick={onClose}>Cancelar</Button>
+              <Button variant='outline' onClick={close}>Cancelar</Button>
               <Button variant='solid' bg='#5072E8' color='#fff' type="submit" isDisabled={isLoading}>Registrar</Button>
             </Flex>
           </form>
-          </Box>
-        </ModalContent>
-      </Modal>
+        </Box>
+      </ModalContent>
+    </Modal>
   )
 }
 

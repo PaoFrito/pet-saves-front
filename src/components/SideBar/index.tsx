@@ -97,7 +97,7 @@ export const SideBar = () => {
 								{userState.username || "Desconhecido"}
 							</Text>
 						</Flex>
-						<FontAwesomeIcon icon={faEllipsis} size="2x" color="#505050" />
+						<FontAwesomeIcon icon={faEllipsis} size="2x" color="#5072E8" />
 					</Flex>
 				</MenuButton>
 				<MenuList borderRadius="15px" p="0">
