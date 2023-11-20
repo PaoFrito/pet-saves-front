@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form"
-import { Textarea, InputGroup, InputRightAddon, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Flex, Text, Input, Box, Grid, Img } from "@chakra-ui/react"
+import { Textarea, InputGroup, InputRightAddon, Button, Modal, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Flex, Text, Input, Box, Grid, Img } from "@chakra-ui/react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaw } from '@fortawesome/free-solid-svg-icons'
 import RadioGroup from "../../RadioGroup"
@@ -7,7 +7,7 @@ import { SelectSpecies } from "../../../model/Enum/SpeciesEnum"
 import { useState } from "react"
 import axios from "axios"
 import useUserContext from "../../../hooks/useUserContext"
-import Dropzone, { useDropzone } from "react-dropzone"
+import Dropzone from "react-dropzone"
 
 enum Size {
   sm = 'small',
@@ -24,7 +24,6 @@ const isToFeed = [{ label: 'Criar publicação', icon: undefined },
 
 type FormData = {
   name: string
-  imgUrl: string
   type: string
   size: Size
   ageInMonths: number
@@ -36,7 +35,7 @@ const AnimalRegisterModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
   const [isLoading, setLoading] = useState(false)
   const { userState } = useUserContext()
   const [file, setFile] = useState()
-  const { watch, setValue, handleSubmit, register } = useForm<FormData>({
+  const { watch, setValue, handleSubmit, register, reset } = useForm<FormData>({
     defaultValues: {
       createPublication: true,
       type: 'dog',
@@ -49,14 +48,13 @@ const AnimalRegisterModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0];
       
-      setFile(Object.assign(file, {
-        preview: URL.createObjectURL(file)
-      }))
       const reader = new FileReader();
       reader.onload = () => {
         const base64String = reader.result;
-        console.log('Arquivo em base64:', base64String);
-        // Aqui você pode fazer o que quiser com a string em base64
+        setFile(Object.assign(file, {
+          preview: URL.createObjectURL(file),
+          base: base64String
+        }))
       };
       
       reader.readAsDataURL(file);
@@ -66,12 +64,14 @@ const AnimalRegisterModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
   const onSubmit = async (data: any) => {
     setLoading(true)
     console.log(data)
-    await axios.post(`${import.meta.env.VITE_BASE_API_URL}/v1/animal/sheltered/registration`, {...data, ageInMonths: Number(data.ageInMonths)}, {
+    await axios.post(`${import.meta.env.VITE_BASE_API_URL}/v1/animal/sheltered/registration`, {...data, ageInMonths: Number(data.ageInMonths), imageUrl: file?.base}, {
       headers: {
         Authorization: userState.accessToken,
       }
     }).then((res) => {
       onClose()
+      reset()
+      setFile(undefined)
     }).catch((err) => {
       console.log(err)
     }).finally(() => {
@@ -143,8 +143,8 @@ const AnimalRegisterModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
               </Flex>
             </Flex>
             <Flex justifyContent="flex-end" mt="18px" gap="12px">
-            <Button variant='outline' onClick={onClose}>Cancelar</Button>
-          <Button variant='solid' bg='#5072E8' color='#fff' type="submit">Registrar</Button>
+              <Button variant='outline' onClick={onClose}>Cancelar</Button>
+              <Button variant='solid' bg='#5072E8' color='#fff' type="submit" isDisabled={isLoading}>Registrar</Button>
             </Flex>
           </form>
           </Box>

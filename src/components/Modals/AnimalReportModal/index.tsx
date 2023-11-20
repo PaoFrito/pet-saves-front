@@ -42,7 +42,7 @@ const AnimalReportModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () =
     <>
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
-        <ModalContent w="6000px">
+        <ModalContent maxW='800px'>
           <ModalHeader fontSize='24px' color='#5072E8' justifyContent='center'>
             <Flex align='center' gap='24px'>
               {faCircleExclamationIcon} Reportar animal perdido

@@ -8,14 +8,10 @@ import { UserContextProvider } from './context/UserContext'
 import './style/base.css'
 
 import axios from 'axios';
-import useUserContext from './hooks/useUserContext'
 
 axios.interceptors.response.use(
   response => response,
   error => {
-    const { userState } = useUserContext();
-    console.log(userState)
-    console.log('userState')
     if (error.response?.status === 401) {
       localStorage.removeItem('user')
       window.location.replace('/login');
