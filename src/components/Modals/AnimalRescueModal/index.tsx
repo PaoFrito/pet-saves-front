@@ -1,9 +1,8 @@
 import { useForm } from "react-hook-form"
-import { Textarea, InputGroup, InputRightAddon, Alert, AlertIcon, AlertTitle, AlertDescription, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Flex, Text, Input, Img } from "@chakra-ui/react"
+import { Textarea, InputGroup, InputRightAddon, Alert, AlertIcon, AlertTitle, AlertDescription, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Flex, Text, Input } from "@chakra-ui/react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaw } from '@fortawesome/free-solid-svg-icons'
 import RadioGroup from "../../RadioGroup"
-import Dropzone from 'react-dropzone'
 import { SelectSpecies } from "../../../model/Enum/SpeciesEnum"
 import { useState } from "react"
 
@@ -31,9 +30,9 @@ type FormData = {
 }
 
 const AnimalReportModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
-  const [alert, setAlert] = useState(false)
+  const [alert] = useState(false)
 
-  const { register, watch, setValue } = useForm<FormData>({
+  const { watch, setValue } = useForm<FormData>({
     defaultValues: {
       feed: true,
     }

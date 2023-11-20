@@ -1,4 +1,4 @@
-import { useRadio, useRadioGroup, HStack, Box, Flex } from "@chakra-ui/react"
+import { useRadio, useRadioGroup, HStack, Flex } from "@chakra-ui/react"
 
 const RadioCard = (props: any) => {
   const { getInputProps, getRadioProps } = useRadio(props)
