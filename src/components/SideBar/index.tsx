@@ -93,7 +93,7 @@ export const SideBar = () => {
 								borderWidth="2px"
 								borderColor="#5072E8"
 							/>
-							<Text fontSize="18px" color="#5072E8" fontWeight="600">
+							<Text fontSize="18px" color="#5072E8" fontWeight="600" textTransform="capitalize">
 								{userState.username || "Desconhecido"}
 							</Text>
 						</Flex>

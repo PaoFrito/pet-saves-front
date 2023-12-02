@@ -12,6 +12,7 @@ import {
   Img,
   Avatar,
   Divider,
+  Tooltip,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShieldHeart } from "@fortawesome/free-solid-svg-icons";
@@ -39,8 +40,7 @@ const AnimalReqestModal = ({
         },
       })
       .then((res) => {
-        console.log(res.data);
-        setAnimalList(res.data);
+        setAnimalList(res.data.filter((x) => x.animal.status === "sheltered"));
       });
   };
 
@@ -60,7 +60,8 @@ const AnimalReqestModal = ({
         <ModalContent maxW="1000px">
           <ModalHeader fontSize="24px" color="#5072E8" justifyContent="center">
             <Flex align="center" gap="24px">
-            <FontAwesomeIcon icon={faShieldHeart} size="2x" /> Solicitações adoção
+              <FontAwesomeIcon icon={faShieldHeart} size="2x" /> Solicitações
+              adoção
             </Flex>
           </ModalHeader>
           <ModalCloseButton />
@@ -70,7 +71,7 @@ const AnimalReqestModal = ({
                 <Flex direction="row" gap="16px" padding="16px">
                   <Flex direction="column" w="40%" gap="8px">
                     <Text fontSize="16px" color="#5072E8" fontWeight="500">
-                      {animal.animal.status === 'lost' ? 'Animal perdido ' + animal.animal.lastLocation : animal.animal.name}
+                      {animal.animal.name}
                     </Text>
                     <Img
                       src={animal.animal.imageUrl}
@@ -84,7 +85,19 @@ const AnimalReqestModal = ({
                     </Text>
                     <Flex direction="row" gap="8px" wrap="wrap">
                       {animal.requests.map((requester: any) => (
-                        <Avatar src={requester.imageUrl} name={requester.name} w="50px" h="50px" />
+                        <Tooltip
+                          label={requester.username}
+                          hasArrow
+                          borderRadius="5px"
+                          textTransform="capitalize"
+                        >
+                          <Avatar
+                            src={requester.imageUrl}
+                            name={requester.username}
+                            w="50px"
+                            h="50px"
+                          />
+                        </Tooltip>
                       ))}
                     </Flex>
                   </Flex>

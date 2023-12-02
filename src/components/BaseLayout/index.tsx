@@ -6,16 +6,16 @@ export const BaseLayout = () =>{
     const padding = '20px'
 
     return(
-        <Flex w='100dvw' minH='100dvh' overflow="hidden">
-            <Box w='30%'>
+        <Flex w='100dvw' minH='100dvh' overflow="hidden" justifyContent="center">
+            <Box w='350px'>
                 <Box position="fixed" w="inherit">
                     <SideBar />
                 </Box>
             </Box>
-            <Flex w='40%' p={padding} borderLeft='1px' borderRight='1px' borderColor='gray.100' flexDirection="column" overflow="hidden">
+            <Flex w='800px' p={padding} borderLeft='1px' borderRight='1px' borderColor='gray.100' flexDirection="column" overflow="hidden">
                 <Feed />
             </Flex>    
-            <Box p={padding} w='30%'>
+            <Box p={padding} w='350px'>
                 <Box position="fixed" w="inherit">
                 <Alert status='info' borderRadius="15px" w="400px" variant='left-accent' alignItems="flex-start">
                     <AlertIcon />

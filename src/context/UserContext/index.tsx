@@ -48,7 +48,6 @@ const UserContextProvider = ({ children }: UserContextProviderProps) => {
     const res = await axios.post(url, credentials);
 
     if (res.status !== 200) {
-      console.log(res);
       return Promise.reject();
     }
 

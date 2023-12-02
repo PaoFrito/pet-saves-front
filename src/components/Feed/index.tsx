@@ -24,7 +24,6 @@ export const Feed = () => {
       console.error("Erro ao buscar os posts:", error);
     }
     setIsLoading(false);
-    console.log(posts)
   };
 
   useEffect(() => {
@@ -32,7 +31,7 @@ export const Feed = () => {
   }, []);
 
   return (
-    <Flex flexDir="column" gap="32px" mb="100px">
+    <Flex flexDir="column" gap="40px" mb="100px">
       {isLoading ? (
         <>
           <PostSkeleton />
@@ -55,6 +54,7 @@ export const Feed = () => {
             imageUrl={x.animal.imageUrl}
             description={x.description}
             alreadyRequested={x.alreadyRequested}
+            lastLocation={x.animal.lastLocation}
           />
         ))
       )}

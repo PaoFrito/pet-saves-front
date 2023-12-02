@@ -17,7 +17,6 @@ export const LoginPage = () => {
 
   useEffect(() => {
     if (userState.id !== "") {
-      console.log(useState);
       navigate("/");
     }
   }, []);

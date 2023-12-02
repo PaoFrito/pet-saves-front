@@ -217,7 +217,7 @@ const AnimalRegisterModal = ({
                   </Text>
                   <InputGroup>
                     <Input type="number" {...register("ageInMonths")} />
-                    <InputRightAddon children="Semanas" />
+                    <InputRightAddon children="meses" />
                   </InputGroup>
                 </Flex>
               </Flex>

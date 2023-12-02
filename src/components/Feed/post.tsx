@@ -18,6 +18,7 @@ interface PostProps {
   description?: string;
   imageUrl: string;
   alreadyRequested: boolean;
+  lastLocation?: string;
 }
 
 export const Post = ({
@@ -34,6 +35,7 @@ export const Post = ({
   imageUrl,
   alreadyRequested,
   animalStatus,
+  lastLocation
 }: PostProps) => {
   const { userState } = useUserContext();
 
@@ -108,7 +110,7 @@ export const Post = ({
           />
           <Flex flexDir="column">
             <Flex alignItems="center" gap="6px">
-              <Text fontSize="16px" color="#5072E8" fontWeight="600">
+              <Text fontSize="16px" color="#5072E8" fontWeight="600" textTransform="capitalize">
                 {authorName || "Desconhecido"}
               </Text>
               <Text fontSize="14px" color="#585858">
@@ -126,23 +128,35 @@ export const Post = ({
             {animalStatus === "lost" ? "Perdido" : animalName}
           </Text>
           <Flex fontSize="14px" gap="3px" marginLeft="auto">
-            <Text>{animalAge ? `${animalAge} semanas de idade •` : ""} </Text>
-            <Button
-              fontSize="14px"
-              isDisabled={isLoading || isRequested || userState.id === authorId}
-              isLoading={isLoading}
-              loadingText="Solicitando"
-              backgroundColor="transparent"
-              p="6px"
-              h="20px"
-              color="#5072E8"
-              fontWeight="500"
-              cursor="pointer"
-              textAlign="right"
-              onClick={requestAdoption}
-            >
-              {userState.id === authorId ? 'Seu animal registrado' : (isRequested ? "Solicitado" : "Solicitar Adoção")}
-            </Button>
+            {animalStatus !== "lost" ? (
+              <>
+                <Text>{`${animalAge} meses de idade •`}</Text>
+                <Button
+                  fontSize="14px"
+                  isDisabled={
+                    isLoading || isRequested || userState.id === authorId
+                  }
+                  isLoading={isLoading}
+                  loadingText="Solicitando"
+                  backgroundColor="transparent"
+                  p="6px"
+                  h="20px"
+                  color="#5072E8"
+                  fontWeight="500"
+                  cursor="pointer"
+                  textAlign="right"
+                  onClick={requestAdoption}
+                >
+                  {userState.id === authorId
+                    ? "Seu animal registrado"
+                    : isRequested
+                    ? "Solicitado"
+                    : "Solicitar Adoção"}
+                </Button>
+              </>
+            ) : (
+              <Text>{lastLocation}</Text>
+            )}
           </Flex>
         </Flex>
       </Flex>

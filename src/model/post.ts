@@ -10,6 +10,7 @@ export type Post = {
         registeredAt: number
         shelteredAt: number
         imageUrl: string
+        lastLocation?: string
     }
     author: {
         id: string
